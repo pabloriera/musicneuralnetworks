@@ -3,8 +3,11 @@
 ## Recursos de musica y codigo creativo con redes neuronales
 
 ### Tensor Flow
-
-https://github.com/jtoy/awesome-tensorflow
+[https://github.com/pkmital/sd
+* TensorFlow Tutorial 1 - From the basics to slightly more interesting applications of TensorFlow
+* TensorFlow Tutorial 2 - Introduction to deep learning based on Google's TensorFlow framework. These tutorials are direct ports of Newmu's Theano
+* https://github.com/jtoy/awesome-tensorflow
+> Mucho
 
 ### Datasets
 * http://jazzomat.hfm-weimar.de/dbformat/dbformat.html
@@ -15,9 +18,6 @@ https://github.com/jtoy/awesome-tensorflow
 
 * http://jmir.sourceforge.net/Bodhidharma.html
 > Genre classification. Es un programa pero habla de la competencia mirex donde concursó.
-
-* http://www.pnas.org/content/110/24/10034.full?tab=ds
-> Recrear el paper de Pablo Zivic en PNAS
 
 * https://teachingmir.wikispaces.com/Datasets
 
@@ -32,4 +32,8 @@ https://github.com/jtoy/awesome-tensorflow
 * http://musicalmetacreation.org/links/corpora/
 > Datos de todo tipo y color
 
+### Ideas
+
+* http://www.pnas.org/content/110/24/10034.full?tab=ds
+> Recrear el paper de Pablo Zivic en PNAS
 
