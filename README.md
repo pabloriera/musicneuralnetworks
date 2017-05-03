@@ -3,11 +3,14 @@
 ## Recursos de musica y codigo creativo con redes neuronales
 
 ### Tensor Flow
-[https://github.com/pkmital/sd
-* TensorFlow Tutorial 1 - From the basics to slightly more interesting applications of TensorFlow
-* TensorFlow Tutorial 2 - Introduction to deep learning based on Google's TensorFlow framework. These tutorials are direct ports of Newmu's Theano
+
+* [Creative Applications of Deep Learning w/ Tensorflow](https://github.com/pkmital/CADL) - [Curso de Kadenze](https://www.kadenze.com/courses/creative-applications-of-deep-learning-with-tensorflow/info)
+* [TensorFlow Tutorial 1](https://github.com/pkmital/tensorflow_tutorials) - From the basics to slightly more interesting applications of TensorFlow
+* [TensorFlow Tutorial 2](https://github.com/nlintz/TensorFlow-Tutorials) - Introduction to deep learning based on Google's TensorFlow framework. These tutorials are direct ports of Newmu's Theano
 * https://github.com/jtoy/awesome-tensorflow
 > Mucho
+* http://playground.tensorflow.org/
+> web interactiva
 
 ### Datasets
 * http://jazzomat.hfm-weimar.de/dbformat/dbformat.html
@@ -37,3 +40,12 @@
 * http://www.pnas.org/content/110/24/10034.full?tab=ds
 > Recrear el paper de Pablo Zivic en PNAS
 
+
+
+
+### Artist and Machine intelligence
+
+* [Artist and Machine intelligence](https://ami.withgoogle.com/)
+* https://medium.com/artists-and-machine-intelligence/selection-of-resources-to-learn-artificial-intelligence-machine-learning-statistical-inference-23bc56ba655#.83vpzp9kj
+* https://medium.com/artists-and-machine-intelligence/music-art-machine-intelligence-2016-conference-proceedings-ea376a4e2576#.7dtq32yj5
+* https://medium.com/artists-and-machine-intelligence/mami-lectures-part-1-2a685ef07e0b#.34gvxsjtj
