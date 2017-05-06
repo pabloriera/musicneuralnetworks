@@ -7,9 +7,8 @@
 * [Creative Applications of Deep Learning w/ Tensorflow](https://github.com/pkmital/CADL) - [Curso de Kadenze](https://www.kadenze.com/courses/creative-applications-of-deep-learning-with-tensorflow/info)
 * [TensorFlow Tutorial 1](https://github.com/pkmital/tensorflow_tutorials) - From the basics to slightly more interesting applications of TensorFlow
 * [TensorFlow Tutorial 2](https://github.com/nlintz/TensorFlow-Tutorials) - Introduction to deep learning based on Google's TensorFlow framework. These tutorials are direct ports of Newmu's Theano
-* https://github.com/jtoy/awesome-tensorflow - Mucho
-* http://playground.tensorflow.org/ - web interactiva
-* https://www.analyticsvidhya.com/blog/2015/07/top-youtube-videos-machine-learning-neural-network-deep-learning/ - videos, conferencias
+* [Awesome List Tensorflow](https://github.com/jtoy/awesome-tensorflow)
+* [Playground](http://playground.tensorflow.org/) - web interactiva
 
 ### Páginas 
 
@@ -48,6 +47,7 @@
 
 * [Awesome List Deep Learning](https://github.com/ChristosChristofidis/awesome-deep-learning)
 * [AI Resources](https://github.com/memo/ai-resources)
+* [Top YouTube Videos on Machine Learning, Neural Network & Deep Learning](https://www.analyticsvidhya.com/blog/2015/07/top-youtube-videos-machine-learning-neural-network-deep-learning/) - videos, conferencias
 
 ### Posts
 
