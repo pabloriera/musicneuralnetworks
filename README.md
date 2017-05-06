@@ -10,7 +10,8 @@
 * [Awesome List Tensorflow](https://github.com/jtoy/awesome-tensorflow)
 * [Playground](http://playground.tensorflow.org/) - web interactiva
 * [Workshop ML4Music](https://github.com/brannondorsey/ml4music-workshop)
-* [Musica con Restricted Boltzman Machines](https://github.com/llSourcell/Music_Generator_Demo)
+* [Musica con Restricted Boltzman Machines](https://github.com/llSourcell/Music_Generator_Demo) - Siraj
+* [Musica con LSTM](ttps://github.com/llSourcell/How-to-Generate-Music-Demo) - Siraj
 
 ### Páginas 
 
