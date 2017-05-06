@@ -9,6 +9,8 @@
 * [TensorFlow Tutorial 2](https://github.com/nlintz/TensorFlow-Tutorials) - Introduction to deep learning based on Google's TensorFlow framework. These tutorials are direct ports of Newmu's Theano
 * [Awesome List Tensorflow](https://github.com/jtoy/awesome-tensorflow)
 * [Playground](http://playground.tensorflow.org/) - web interactiva
+* [Workshop ML4Music](https://github.com/brannondorsey/ml4music-workshop)
+* [Musica con Restricted Boltzman Machines](https://github.com/llSourcell/Music_Generator_Demo)
 
 ### Páginas 
 
