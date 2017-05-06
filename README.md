@@ -46,6 +46,7 @@
 
 ### Listas de recursos
 
+* [Awesome List Deep Learning](https://github.com/ChristosChristofidis/awesome-deep-learning)
 * [AI Resources](https://github.com/memo/ai-resources)
 
 ### Posts
