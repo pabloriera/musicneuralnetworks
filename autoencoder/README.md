@@ -1,6 +1,6 @@
 # Spectrum Autoencoder
 
-## Dependencias
+## Dependencies
 
 - Tensorflow
 - Librosa
