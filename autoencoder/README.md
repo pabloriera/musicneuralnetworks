@@ -1,5 +1,9 @@
 # Spectrum Autoencoder
 
+## Dependencias
+
+- Tensorflow
+- Librosa
 
 ## References
 
