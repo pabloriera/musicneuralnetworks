@@ -123,12 +123,21 @@ class NAE():
 
         reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)        
         reg = tf.reduce_mean(reg_losses)
-        msd = tf.reduce_mean(tf.squared_difference(X, Y)) 
-        cost = msd + reg
+        
+        #could be use another error metrics?
+        cost_noreg = tf.reduce_mean(tf.squared_difference(X, Y))
+                             
+        cost = cost_noreg + reg
 
-        self.optimizer = tf.train.AdamOptimizer(learning_rate).minimize(cost)
+        self.optimizer = tf.train.AdamOptimizer(learning_rate).minimize(cost)        
+        
+        tf.summary.scalar("cost_noreg", cost_noreg)      
+        tf.summary.scalar("cost", cost)
+        
+        merged_summary_op = tf.summary.merge_all()
 
-        self.variables_dict = {'X':X,'Y':Y,'z':encoder_op,'cost':cost,'W':Ws,'msd':msd}
+        self.variables_dict = {'X':X,'Y':Y,'z':encoder_op,'cost':cost,
+                               'W':Ws,'cost_noreg':cost_noreg,'merged_summary_op':merged_summary_op}
  
     def init_session(self):
         # Launch the graph
@@ -136,29 +145,46 @@ class NAE():
         self.sess = tf.Session(config=config)
         self.sess.run(tf.global_variables_initializer())
 
-    def train(self,data,batch_size, n_epochs,display_step=10 ):
+    def train(self,data,batch_size, n_epochs,display_step=10,logs_path='/tmp/tensorflow_logs/' ):
+        import time
+        timestr = time.strftime("%Y%m%d-%H%M%S")
+
+        summary_writer = tf.summary.FileWriter(logs_path+timestr, graph=self.sess.graph)
 
         # Fit all training data
         self.costs_list = []
-        self.msd_list = []
+        self.cost_noreg_list = []
         total_batch = int(data.length/batch_size)
+        
+        print("Run the command line:\n" \
+          "--> tensorboard --logdir=/tmp/tensorflow_logs " \
+          "\nThen open http://0.0.0.0:6006/ into your web browser")
+            
         for epoch_i in range(n_epochs):
             for batch_i in range(total_batch):
                 batch_xs = data.next_batch(batch_size)
 
                 self.sess.run(self.optimizer, feed_dict={self.variables_dict['X']: batch_xs })
-                cost_value,msd_value = self.sess.run([self.variables_dict['cost'],self.variables_dict['msd']],  feed_dict={self.variables_dict['X']: batch_xs})
+                              
+                
+                cost_value,cost_noreg,summary = self.sess.run([self.variables_dict['cost'],
+                                                              self.variables_dict['cost_noreg'],
+                                                              self.variables_dict['merged_summary_op']],
+                                                              feed_dict={self.variables_dict['X']: batch_xs})
+                
+                summary_writer.add_summary(summary, epoch_i * total_batch + batch_i)
                 
                 self.costs_list.append(cost_value)
-                self.msd_list.append(msd_value)
+                self.cost_noreg_list.append(cost_noreg)
                     
             # Display logs per epoch step
             if epoch_i % display_step == 0:
                 print("Epoch:", '%04d' % (epoch_i),"cost=", "{:.9f}".format(cost_value))
 
+                
         print("Optimization Finished!")
 
-        return self.costs_list, self.msd_list
+        return self.costs_list, self.cost_noreg_list
 
     def save(self,filename):
         saver = tf.train.Saver()
