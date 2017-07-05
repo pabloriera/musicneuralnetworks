@@ -14,3 +14,9 @@
  - [Musical Audio Synthesis Using Autoencoding Neural Nets](http://www.cs.dartmouth.edu/~sarroff/papers/sarroff2014a.pdf)
 
  - [Neural Audio Synthesis of Musical Notes with WaveNet Autoencoders](https://arxiv.org/pdf/1704.01279)
+
+## TODO
+
+- Change cost function?
+- Use training validation scheme
+- Change spectrum feature, CQT?
