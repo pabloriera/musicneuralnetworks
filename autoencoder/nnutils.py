@@ -1,6 +1,493 @@
 import tensorflow as tf
 import numpy as np
 
+# class SSAE():
+
+
+#     def __init__(self,n_input, dimensions, learning_rate=0.005, activation=tf.nn.relu, bias = False, sparsity_level = -0.9, sparse_scale = 0.01, l2scale = 0.01, meaninit=0.0,stddev=0.05,identity_initializer=False):
+#         """
+#         Stacked Sparse Autoencoder
+#         """
+#         self.sparse_scale = sparse_scale
+
+#     def stack_ae(dimensions,Ws=None,bs=None)
+
+#         tf.reset_default_graph()
+
+#         # tf Graph input (only pictures)
+#         X = tf.placeholder("float", [None, n_input])
+
+        
+
+#         # let's first copy our X placeholder to the name current_input
+#         current_input = X
+
+#         # We're going to keep every matrix we create so let's create a list to hold them all
+#         Ws = []
+#         bs = []
+#         activs =[]
+
+#         # We'll create a for loop to create each layer:
+#         for layer_i, n_output in enumerate(dimensions):
+
+#             # just like in the last session,
+#             # we'll use a variable scope to help encapsulate our variables
+#             # This will simply prefix all the variables made in this scope
+#             # with the name we give it.
+#             with tf.variable_scope("encoder/layer/{}".format(layer_i)):
+
+#                 # Create a weight matrix which will increasingly reduce
+#                 # down the amount of information in the input by performing
+#                 # a matrix multiplication
+#                 if identity_initializer:
+#                     initier = tf.constant_initializer(np.identity(n_input)*meaninit)
+#                 else:
+#                     initier = tf.random_normal_initializer(mean=meaninit, stddev=stddev)
+
+#                 W = tf.get_variable(
+#                     name='W',
+#                     shape=[n_input, n_output],
+#                     initializer=initier,
+#                     regularizer= tf.contrib.layers.l2_regularizer(l2scale))
+
+#                 # Now we'll multiply our input by our newly created W matrix
+#                 # and add the bias
+#                 h = tf.matmul(current_input, W)
+
+#                 if bias:                    
+                    
+#                     b = tf.get_variable(name='b',shape=[n_output],initializer=tf.random_normal_initializer(mean=meaninit, stddev=stddev),
+#                     regularizer = tf.contrib.layers.l2_regularizer(l2scale))
+#                     current_input = activation(tf.add(h,b))
+#                     bs.append(b)
+
+#                 else:
+                    
+#                     current_input = activation(h)
+                
+
+                
+#                 # Finally we'll store the weight matrix so we can build the decoder.
+#                 Ws.append(W)
+
+#                 # We'll also replace n_input with the current n_output, so that on the
+#                 # next iteration, our new number inputs will be correct.
+#                 # print([n_input, n_output])
+
+#                 n_input = n_output
+#                 activs.append(current_input)
+                
+#         # We'll first reverse the order of our weight matrices
+#         Ws = Ws[::-1]
+        
+#         # if bias:
+#             # bs = -bs[::-1]
+
+#         encoder_op = current_input
+
+#         # then reverse the order of our dimensions
+#         # appending the last layers number of inputs.
+#         dimensions = dimensions[::-1][1:] + [n_input]
+
+#         # print(dimensions)
+
+#         for layer_i, n_output in enumerate(dimensions):
+#             # we'll use a variable scope again to help encapsulate our variables
+#             # This will simply prefix all the variables made in this scope
+#             # with the name we give it.
+#             with tf.variable_scope("decoder/layer/{}".format(layer_i)):
+
+#                 # Now we'll grab the weight matrix we created before and transpose it
+#                 W = tf.transpose(Ws[layer_i])
+
+#                 if bias:
+                    
+#                     b = tf.get_variable(name='b',shape=[n_output],initializer=tf.random_normal_initializer(mean=meaninit, stddev=stddev),
+#                     regularizer = tf.contrib.layers.l2_regularizer(l2scale))
+
+#                     # Now we'll multiply our input by our transposed W matrix
+#                     h = tf.matmul(tf.add(current_input,b), W)
+
+#                 else:
+#                     h = tf.matmul(current_input, W)
+
+#                 # And then use a relu activation function on its output
+#                 current_input = activation(h)
+
+#                 # We'll also replace n_input with the current n_output, so that on the
+#                 # next iteration, our new number inputs will be correct.
+#                 # print([n_input, n_output])
+
+#                 n_input = n_output
+#                 activs.append(current_input)
+
+#         Y = current_input
+
+#         reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+#         reg_l2 = tf.reduce_mean(reg_losses)       
+
+#         # sparsity_level = tf.constant(sparsity_level,shape=[dimensions[-1]],dtype="float")
+
+#         # p = (sparsity_level+1.0)/2.0        
+#         # p_hat = (encoder_op+1.0)/2.0
+
+#         # p = tf.clip_by_value(sparsity_level,1e-10,1-1e10)
+#         # p_hat = tf.clip_by_value(activs[0],1e-10,1-1e10)
+
+#         # reg_sparse = sparse_scale*tf.reduce_mean(p * tf.log(p) - p * tf.log(p_hat) + (1 - p) * tf.log(1 - p) - (1 - p) * tf.log(1 - p_hat))        
+#         # reg_sparse = sparse_scale*(tf.reduce_mean(tf.abs(encoder_op))-sparsity_level)**2
+#         reg_sparse = sparse_scale*(tf.reduce_mean(tf.log(1+encoder_op**2)))
+        
+#         cost_base = tf.reduce_mean(tf.squared_difference(X, Y))
+                             
+#         cost = cost_base + reg_sparse + reg_l2
+
+#         self.optimizer = tf.train.AdamOptimizer(learning_rate).minimize(cost)
+#         # self.optimizer = tf.train.RMSPropOptimizer(learning_rate).minimize(cost)
+
+        
+#         tf.summary.scalar("reg_sparse", reg_sparse)
+#         tf.summary.scalar("reg_l2", reg_l2)
+#         tf.summary.scalar("cost", cost_base)
+        
+#         merged_summary_op = tf.summary.merge_all()
+
+#         self.variables_dict = {'X':X,'Y':Y,'z':encoder_op,'reg_l2':reg_l2,'reg_sparse':reg_sparse,
+#                                'W':Ws,'cost':cost, 'cost_base':cost_base,'merged_summary_op':merged_summary_op}
+
+
+
+#     def init_session(self):
+#         # Launch the graph
+#         config = tf.ConfigProto( device_count = {'GPU': 0} )
+#         self.sess = tf.Session(config=config)
+#         self.sess.run(tf.global_variables_initializer())
+
+#     def train(self,data,batch_size, n_epochs,display_step=10,logs_path='/tmp/tensorflow_logs/' ):
+#         import time
+#         timestr = time.strftime("%Y%m%d-%H%M%S")
+
+#         summary_writer = tf.summary.FileWriter(logs_path+timestr, graph=self.sess.graph)
+
+#         # Fit all training data
+#         self.costs_list = []
+#         self.reg_sparse_list = []
+#         self.reg_l2_list = []
+#         total_batch = int(data.length/batch_size)
+        
+#         print("Run the command line:\n" \
+#           "--> tensorboard --logdir=/tmp/tensorflow_logs " \
+#           "\nThen open http://0.0.0.0:6006/ into your web browser")
+            
+#         for epoch_i in range(n_epochs):
+#             for batch_i in range(total_batch):
+#                 batch_xs = data.next_batch(batch_size)
+
+#                 self.sess.run(self.optimizer, feed_dict={self.variables_dict['X']: batch_xs })
+                              
+                
+#                 cost_value,cost_reg_sparse,cost_reg_l2,summary = self.sess.run([self.variables_dict['cost_base'],
+#                                                               self.variables_dict['reg_sparse'],
+#                                                               self.variables_dict['reg_l2'],
+#                                                               self.variables_dict['merged_summary_op']],
+#                                                               feed_dict={self.variables_dict['X']: batch_xs})
+                
+#                 summary_writer.add_summary(summary, epoch_i * total_batch + batch_i)
+                
+#                 self.costs_list.append(cost_value)
+#                 self.reg_l2_list.append(cost_reg_l2)
+#                 self.reg_sparse_list.append(cost_reg_sparse)
+                    
+#             # Display logs per epoch step
+#             if epoch_i % display_step == 0:
+#                 print("Epoch:", '%04d' % (epoch_i),"cost=", "{:.9f}".format(cost_value))
+
+                
+#         print("Optimization Finished!")
+
+#         return self.costs_list, self.reg_sparse_list,  self.reg_l2_list,
+
+#     def save(self,filename):
+#         saver = tf.train.Saver()
+#         save_path = saver.save(self.sess, filename+".ckpt")
+#         print("Model saved in file: %s" % save_path)
+
+#     def load(self,filename):
+#         saver = tf.train.Saver()        
+#         save_path = saver.restore(self.sess, filename+".ckpt")
+#         print("Model restored")
+
+#     def get_variables_dict(self):
+#         return self.variables_dict
+
+#     def get_session(self):
+#         return self.sess
+
+#     def get_costlist(self):
+#         return self.costs_list
+
+class SAE():
+
+
+    def __init__(self,n_input, dimensions, learning_rate=0.005, activation=tf.nn.relu, bias = False, sparse_scale = 0.01, l2scale = 0.01, meaninit=0.0,stddev=0.05,identity_initializer=False, weights=None, biases=None, tensorboard=False):
+
+
+        self.tensorboard = tensorboard
+        self.sparse_scale = sparse_scale
+
+        tf.reset_default_graph()
+
+        # tf Graph input (only pictures)
+        X = tf.placeholder("float", [None, n_input])
+
+        # let's first copy our X placeholder to the name current_input
+        current_input = X
+
+        # We're going to keep every matrix we create so let's create a list to hold them all
+        Ws = []
+        bs = []
+        activs =[]
+
+        # We'll create a for loop to create each layer:
+        for layer_i, n_output in enumerate(dimensions):
+
+            # just like in the last session,
+            # we'll use a variable scope to help encapsulate our variables
+            # This will simply prefix all the variables made in this scope
+            # with the name we give it.
+            with tf.variable_scope("encoder/layer/{}".format(layer_i)):
+
+                # Create a weight matrix which will increasingly reduce
+                # down the amount of information in the input by performing
+                # a matrix multiplication
+
+                if weights!=None:
+                    initier = tf.constant_initializer(weights[layer_i])
+                else:
+                    if identity_initializer:
+                        initier = tf.constant_initializer(np.identity(n_input)*meaninit)
+                    else:
+                        initier = tf.random_normal_initializer(mean=meaninit, stddev=stddev)
+
+                W = tf.get_variable(
+                    name='W',
+                    shape=[n_input, n_output],
+                    initializer=initier,
+                    regularizer = tf.contrib.layers.l2_regularizer(l2scale))
+
+                # Now we'll multiply our input by our newly created W matrix
+                # and add the bias
+                h = tf.matmul(current_input, W)
+
+                if biases!=None:
+                    initier = tf.constant_initializer(biases[layer_i])
+                else:
+                    initier = tf.random_normal_initializer(mean=meaninit, stddev=stddev)
+
+                if bias:                    
+                    b = tf.get_variable(name='b',shape=[n_output],initializer=initier,
+                    regularizer = tf.contrib.layers.l2_regularizer(l2scale))
+                    current_input = activation(tf.add(h,b))
+                    bs.append(b)
+
+                else:
+                    
+                    current_input = activation(h)
+                
+
+                
+                # Finally we'll store the weight matrix so we can build the decoder.
+                Ws.append(W)
+
+                # We'll also replace n_input with the current n_output, so that on the
+                # next iteration, our new number inputs will be correct.
+                # print([n_input, n_output])
+
+                n_input = n_output
+                activs.append(current_input)
+                
+        # We'll first reverse the order of our weight matrices
+        Ws = Ws[::-1]
+        
+        if bias:
+            bs = bs[::-1]
+
+        encoder_op = current_input
+
+        # then reverse the order of our dimensions
+        # appending the last layers number of inputs.
+        dimensions = dimensions[::-1][1:] + [n_input]
+
+        # print(dimensions)
+
+        for layer_i, n_output in enumerate(dimensions):
+            # we'll use a variable scope again to help encapsulate our variables
+            # This will simply prefix all the variables made in this scope
+            # with the name we give it.
+            with tf.variable_scope("decoder/layer/{}".format(layer_i)):
+
+                # Now we'll grab the weight matrix we created before and transpose it
+                W = tf.transpose(Ws[layer_i])
+
+                if bias:
+                    # Now we'll multiply our input by our transposed W matrix
+                    h = tf.matmul(tf.add(current_input,-bs[layer_i]), W)
+
+                else:
+                    h = tf.matmul(current_input, W)
+
+                # And then use a relu activation function on its output
+                current_input = activation(h)
+
+                # We'll also replace n_input with the current n_output, so that on the
+                # next iteration, our new number inputs will be correct.
+                # print([n_input, n_output])
+
+                n_input = n_output
+                activs.append(current_input)
+
+        Y = current_input
+
+        reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+        reg_l2 = tf.reduce_mean(reg_losses)       
+
+        # sparsity_level = tf.constant(sparsity_level,shape=[dimensions[-1]],dtype="float")
+
+        # p = (sparsity_level+1.0)/2.0        
+        # p_hat = (encoder_op+1.0)/2.0
+
+        # p = tf.clip_by_value(sparsity_level,1e-10,1-1e10)
+        # p_hat = tf.clip_by_value(activs[0],1e-10,1-1e10)
+
+        # reg_sparse = sparse_scale*tf.reduce_mean(p * tf.log(p) - p * tf.log(p_hat) + (1 - p) * tf.log(1 - p) - (1 - p) * tf.log(1 - p_hat))        
+        # reg_sparse = sparse_scale*(tf.reduce_mean(tf.abs(encoder_op))-sparsity_level)**2
+
+        pro = encoder_op/tf.reduce_sum(encoder_op)
+
+        reg_sparse = sparse_scale*(-tf.reduce_mean(pro*tf.log(pro**2+1e-10)))
+
+        # reg_sparse = sparse_scale*(tf.reduce_mean(tf.log(1+encoder_op**2)))
+        
+        cost_base = tf.reduce_mean(tf.squared_difference(X, Y))
+                             
+        cost = cost_base + reg_sparse + reg_l2
+
+        self.optimizer = tf.train.AdamOptimizer(learning_rate).minimize(cost)
+        # self.optimizer = tf.train.RMSPropOptimizer(learning_rate).minimize(cost)
+    
+
+        self.variables_dict = {'X':X,'Y':Y,'z':encoder_op,'reg_l2':reg_l2,'reg_sparse':reg_sparse,
+                               'W':Ws,'b':bs,'cost':cost, 'cost_base':cost_base}
+
+        if self.tensorboard:
+            tf.summary.scalar("reg_sparse", reg_sparse)
+            tf.summary.scalar("reg_l2", reg_l2)
+            tf.summary.scalar("cost", cost_base)
+            
+            merged_summary_op = tf.summary.merge_all()
+
+            self.variables_dict.update({'merged_summary_op':merged_summary_op})
+ 
+
+    def init_session(self):
+        # Launch the graph
+        config = tf.ConfigProto( device_count = {'GPU': 0} )
+        self.sess = tf.Session(config=config)
+        self.sess.run(tf.global_variables_initializer())
+
+    def train(self,data,batch_size,n_epochs=10000,tolerance=None,display_step=10,logs_path='/tmp/tensorflow_logs/',alpha=0.999):
+
+        if self.tensorboard:
+            import time
+            timestr = time.strftime("%Y%m%d-%H%M%S")
+            summary_writer = tf.summary.FileWriter(logs_path+timestr, graph=self.sess.graph)
+
+       
+        cost_ = 0
+
+        self.cost_base_list = []
+        self.reg_sparse_list = []
+        self.reg_l2_list = []
+        self.cost_list = []
+
+        total_batch = int(data.length/batch_size)
+        
+        if self.tensorboard:
+            print("Run the command line:\n" \
+              "--> tensorboard --logdir=/tmp/tensorflow_logs " \
+              "\nThen open http://0.0.0.0:6006/ into your web browser")
+            
+        for epoch_i in range(n_epochs):
+            for batch_i in range(total_batch):
+                batch_xs = data.next_batch(batch_size)
+
+                self.sess.run(self.optimizer, feed_dict={self.variables_dict['X']: batch_xs })
+                
+            if self.tensorboard:
+                cost_base,cost_reg_sparse,cost_reg_l2,summary = self.sess.run([self.variables_dict['cost_base'],
+                                                          self.variables_dict['reg_sparse'],
+                                                          self.variables_dict['reg_l2'],
+                                                          self.variables_dict['merged_summary_op']],
+                                                          feed_dict={self.variables_dict['X']: batch_xs})
+
+                summary_writer.add_summary(summary, epoch_i * total_batch + batch_i)
+
+            else:
+
+                cost_base,cost_reg_sparse,cost_reg_l2 = self.sess.run([self.variables_dict['cost_base'],
+                                                          self.variables_dict['reg_sparse'],
+                                                          self.variables_dict['reg_l2']],
+                                                          feed_dict={self.variables_dict['X']: batch_xs})
+
+
+            if epoch_i==0:
+                cost_ = (cost_base+cost_reg_sparse+cost_reg_l2)
+
+            cost = cost_*alpha + (cost_base+cost_reg_sparse+cost_reg_l2)*(1-alpha)           
+
+
+            self.cost_list.append(cost)
+            self.cost_base_list.append(cost_base)
+            self.reg_l2_list.append(cost_reg_l2)
+            self.reg_sparse_list.append(cost_reg_sparse)
+                    
+            # Display logs per epoch step
+            if (epoch_i+1) % display_step == 0:
+                print("Epoch:", '%04d' % (epoch_i+1),"cost=", "{:.9f}".format(cost))
+
+
+            if tolerance!=None and epoch_i>10:
+                if cost_- cost >0:
+                    if cost_- cost < tolerance:
+                        print(cost_-cost)
+                        break
+            
+            if np.isnan(cost):
+                break
+
+            cost_ = cost
+                
+        # print("Optimization Finished!")
+
+    def save(self,filename):
+        saver = tf.train.Saver()
+        save_path = saver.save(self.sess, filename+".ckpt")
+        print("Model saved in file: %s" % save_path)
+
+    def load(self,filename):
+        saver = tf.train.Saver()        
+        save_path = saver.restore(self.sess, filename+".ckpt")
+        print("Model restored")
+
+    def get_variables_dict(self):
+        return self.variables_dict
+
+    def get_session(self):
+        return self.sess
+
+    def get_costlist(self):
+        return self.costs_list
+
 class NAE():
 
 
